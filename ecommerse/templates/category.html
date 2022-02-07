@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadiscription %}
+   {% if category %}
+     {{ category.discription | truncatewords:200 }}
+   {% else %}
+     Welcome to ABC shopping cart...
+   {% endif %}
+{% endblock %}
+
+{% block title %}
+   {% if category %}
+     {{ category.name}} - ABC shopp -
+   {% else %}
+     See our New collections -ABC market
+   {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+<div>
+    <div class="row my_row_class">
+        <div content="mx-auto">
+        <p><a href="{% url 'shop:allproductcat' %}">Our Product Collection...</a></p>
+    </div>
+        </div>
+</div>
+   {% endif %}
+ <div class="mx_auto">
+    {% if category %}
+        <img class="my_image" src="{{ category.image.url }}" alt="{{category.name}}" width="1250px;">
+ </div>
+ <br>
+ <div>
+    <h2 class="text-center my_title">{{category.name}}</h2>
+    <p class="text-justify">{{category.disc}}</p>
+ </div>
+    {% else %}
+<div>
+    <img class="my_image my_image_padding"  src="{% static 'img/banner1.png' %}" alt="Our products"  width="1250px;">
+</div>
+<br>
+<div>
+    <h1 class="text-center  my_title">Our Products Collection....</h1><br>
+    <h2>SMARTPHONES</h2>
+    <p class="text-justify">A smartphone is a computing platform portable device that combines mobile telephone and computing functions into one unit. They are distinguished from feature phones by their stronger hardware capabilities and extensive mobile operating systems, which facilitate wider software, internet (including web browsing over mobile broadband), and multimedia functionality (including music, video, cameras, and gaming), alongside core phone functions such as voice calls and text messaging. Smartphones typically contain a number of metal–oxide–semiconductor (MOS) integrated circuit (IC) chips, include various sensors that can be leveraged by pre-included and third-party software (such as a magnetometer, proximity sensors, barometer, gyroscope, accelerometer and more), and support wireless communications protocols (such as Bluetooth, Wi-Fi, or satellite navigation).</p>
+    <h2>LAPTOPS</h2>
+    <p class="text-justify">A laptop, laptop computer, or notebook computer is a small, portable personal computer (PC) with a screen and alphanumeric keyboard. These typically have a clam shell form factor with the screen mounted on the inside of the upper lid and the keyboard on the inside of the lower lid, although 2-in-1 PCs with a detachable keyboard are often marketed as laptops or as having a laptop mode. Laptops are folded shut for transportation, and thus are suitable for mobile use.[1] Its name comes from lap, as it was deemed practical to be placed on a person's lap when being used. Today, laptops are used in a variety of settings, such as at work, in education, for playing games, web browsing, for personal multimedia, and general home computer use.</p>
+</div>
+   {% endif %}
+<div class="container" style="background-color:red;">
+    <div class="row max_auto">
+
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-lg-4 ">
+          <div class="card text-center" style="min-width:18rem;">
+            <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}" width="250px" height="400px"></a>
+
+              <div class="card-body">
+                <h3>{{product.name}}</h3>
+                <p>$ {{product.price}}</p>
+                <p>{{product.disc}}</p>
+              </div>
+          </div>
+        </div>
+        {% endfor %}
+
+    </div>
+     <div class="mx-auto">
+        {% if products.paginator.num_pages > 1  %}
+
+
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+               <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+     </div>
+    <br>
+</div>
+{% endblock %}
